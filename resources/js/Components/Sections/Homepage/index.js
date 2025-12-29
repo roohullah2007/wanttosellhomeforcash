@@ -1,0 +1,16 @@
+export { default as TopBar } from './TopBar';
+export { default as Header } from './Header';
+export { default as HeroSection } from './HeroSection';
+export { default as AsSeenOnSection } from './AsSeenOnSection';
+export { default as HowItWorksSection } from './HowItWorksSection';
+export { default as CallToActionBanner } from './CallToActionBanner';
+export { default as ServicesSection } from './ServicesSection';
+export { default as WhyChooseUsSection } from './WhyChooseUsSection';
+export { default as OurPledgeSection } from './OurPledgeSection';
+export { default as StatsSection } from './StatsSection';
+export { default as TestimonialsSection } from './TestimonialsSection';
+export { default as Testimonials2Section } from './Testimonials2Section';
+export { default as FAQSection } from './FAQSection';
+export { default as ContactSection } from './ContactSection';
+export { default as ComparisonSection } from './ComparisonSection';
+export { default as Footer } from './Footer';

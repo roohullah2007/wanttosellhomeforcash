@@ -1,0 +1,67 @@
+/**
+ * Hero 2 Section Schema
+ */
+
+import { DEFAULT_FORM_FIELDS } from '../../../shared/schemas/groups/formFields';
+
+export const hero2Schema = {
+    name: 'Banner',
+    key: 'banner',
+    description: 'Hero section with background image and lead capture form',
+    fields: [
+        { key: 'backgroundImage', type: 'image', label: 'Background Image', default: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1920' },
+        { key: 'headline', type: 'text', label: 'Headline', default: 'Ready to Sell' },
+        { key: 'headlineItalic', type: 'text', label: 'Headline (Italic)', default: 'Your Home?' },
+        { key: 'subheadline', type: 'textarea', label: 'Subheadline', default: 'Get a fair cash offer in 24 hours. No fees, no repairs, no hassle. Fill out the form and we\'ll contact you right away.' },
+        { key: 'ctaPrimaryText', type: 'text', label: 'Primary CTA Text', default: 'Get Your Cash Offer' },
+        { key: 'ctaPrimaryLink', type: 'text', label: 'Primary CTA Link', default: '#contact-form' },
+        { key: 'ctaSecondaryText', type: 'text', label: 'Secondary CTA Text', default: 'How It Works' },
+        { key: 'ctaSecondaryLink', type: 'text', label: 'Secondary CTA Link', default: '#how-it-works' },
+        { key: 'formTitle', type: 'text', label: 'Form Title', default: 'Get Your Cash Offer' },
+        { key: 'formSubtitle', type: 'text', label: 'Form Subtitle', default: 'Fill out the form below for a no-obligation offer' },
+        { key: 'buttonText', type: 'text', label: 'Submit Button Text', default: 'Get A Quick Cash Offer Now!' },
+        { key: 'successMessage', type: 'textarea', label: 'Success Message', default: "Thank you! We'll be in touch within 24 hours with your cash offer." },
+        { key: 'consentText', type: 'textarea', label: 'Consent Text', default: "By submitting this form, you agree to be contacted by {company} and our partners about your property. There is no obligation, and you may opt out at any time. Your information is secure and protected under our {privacy} and {terms}." },
+        { key: 'formFields', type: 'formFields', label: 'Form Fields', default: DEFAULT_FORM_FIELDS },
+        { key: 'enableUtmTracking', type: 'boolean', label: 'Enable UTM Tracking', default: true },
+        { key: 'enableGclidTracking', type: 'boolean', label: 'Enable GCLID Tracking', default: true },
+        { key: 'enableFbclidTracking', type: 'boolean', label: 'Enable FBCLID Tracking', default: true },
+        { key: 'formBgColor', type: 'color', label: 'Form Background Color', default: '#ffffff' },
+        { key: 'formBorderRadius', type: 'text', label: 'Form Border Radius', default: '16px' },
+        { key: 'inputBorderRadius', type: 'text', label: 'Input Border Radius', default: '8px' },
+        { key: 'inputBorderColor', type: 'color', label: 'Input Border Color', default: '#d1d5db' },
+        { key: 'inputPadding', type: 'text', label: 'Input Padding', default: '12px 16px' },
+        { key: 'labelColor', type: 'color', label: 'Label Color', default: '#374151' },
+        { key: 'labelFontSize', type: 'text', label: 'Label Font Size', default: '14px' },
+        { key: 'labelFontWeight', type: 'text', label: 'Label Font Weight', default: '500' },
+    ],
+    getDefaultContent: () => ({
+        backgroundImage: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1920',
+        headline: 'Ready to Sell',
+        headlineItalic: 'Your Home?',
+        subheadline: 'Get a fair cash offer in 24 hours. No fees, no repairs, no hassle. Fill out the form and we\'ll contact you right away.',
+        ctaPrimaryText: 'Get Your Cash Offer',
+        ctaPrimaryLink: '#contact-form',
+        ctaSecondaryText: 'How It Works',
+        ctaSecondaryLink: '#how-it-works',
+        formTitle: 'Get Your Cash Offer',
+        formSubtitle: 'Fill out the form below for a no-obligation offer',
+        buttonText: 'Get A Quick Cash Offer Now!',
+        successMessage: "Thank you! We'll be in touch within 24 hours with your cash offer.",
+        consentText: "By submitting this form, you agree to be contacted by {company} and our partners about your property. There is no obligation, and you may opt out at any time. Your information is secure and protected under our {privacy} and {terms}.",
+        formFields: DEFAULT_FORM_FIELDS,
+        enableUtmTracking: true,
+        enableGclidTracking: true,
+        enableFbclidTracking: true,
+        formBgColor: '#ffffff',
+        formBorderRadius: '16px',
+        inputBorderRadius: '8px',
+        inputBorderColor: '#d1d5db',
+        inputPadding: '12px 16px',
+        labelColor: '#374151',
+        labelFontSize: '14px',
+        labelFontWeight: '500',
+    }),
+};
+
+export default hero2Schema;
