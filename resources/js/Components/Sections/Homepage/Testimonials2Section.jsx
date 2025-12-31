@@ -10,25 +10,25 @@ export default function Testimonials2Section() {
             quote: 'They saved us so much time and stress! We were relocating for work and needed to sell fast. They made a fair offer, closed in just 10 days, and we could focus on our move without worrying about the house.',
             author: 'Sarah Mitchell',
             location: 'Sold home in Miami, FL',
-            image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=200',
+            image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100',
         },
         {
             quote: 'I was skeptical at first, but they were completely transparent throughout the process. No hidden fees, no last-minute surprises. The price they offered was fair, and they handled all the paperwork. Highly recommend!',
             author: 'Michael Torres',
             location: 'Sold home in Houston, TX',
-            image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=200',
+            image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
         },
         {
             quote: 'After my divorce, I needed to sell our family home quickly. They were compassionate, professional, and made the entire process painless. I got cash in hand and could start fresh. Thank you!',
             author: 'Jennifer Adams',
             location: 'Sold home in Phoenix, AZ',
-            image: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=200',
+            image: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=100',
         },
         {
             quote: 'My elderly parents needed to move to assisted living and we had to sell their house fast. These folks were amazing - patient, understanding, and made a great offer. Closed in 2 weeks!',
             author: 'Robert Chen',
             location: 'Sold home in Denver, CO',
-            image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=200',
+            image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100',
         },
     ];
 

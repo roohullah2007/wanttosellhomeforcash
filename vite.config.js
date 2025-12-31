@@ -10,4 +10,25 @@ export default defineConfig({
         }),
         react(),
     ],
+    build: {
+        // Minify for production
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true,
+                drop_debugger: true,
+            },
+        },
+        // Code splitting for better caching
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['react', 'react-dom'],
+                    inertia: ['@inertiajs/react'],
+                },
+            },
+        },
+        // Target modern browsers for smaller bundle
+        target: 'es2020',
+    },
 });

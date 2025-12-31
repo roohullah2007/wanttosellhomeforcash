@@ -1,6 +1,18 @@
 import { useForm } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
 export default function HeroSection() {
+    const [bgImage, setBgImage] = useState('');
+
+    useEffect(() => {
+        // Use smaller image for mobile, larger for desktop
+        const isMobile = window.innerWidth <= 768;
+        const imageUrl = isMobile
+            ? 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800'
+            : 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1280';
+        setBgImage(imageUrl);
+    }, []);
+
     const { data, setData, post, processing, errors } = useForm({
         property_address: '',
         name: '',
@@ -25,8 +37,8 @@ export default function HeroSection() {
     return (
         <section
             id="home"
-            className="relative min-h-screen flex items-center py-12 md:py-16 lg:py-20 overflow-hidden bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: 'url(https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1920)' }}
+            className="relative min-h-screen flex items-center py-12 md:py-16 lg:py-20 overflow-hidden bg-cover bg-center bg-no-repeat bg-gray-800"
+            style={{ backgroundImage: bgImage ? `url(${bgImage})` : 'none' }}
         >
             {/* Overlay */}
             <div className="absolute inset-0 z-0 bg-black/60 pointer-events-none"></div>
@@ -65,7 +77,7 @@ export default function HeroSection() {
 
                         {/* Trust Logos */}
                         <div className="flex items-center justify-start">
-                            <img src="/images/google.webp" alt="Trusted by Google, BBB, and Yelp" className="h-10 md:h-12 w-auto" />
+                            <img src="/images/google.webp" alt="Trusted by Google, BBB, and Yelp" className="h-10 md:h-12 w-auto" width="180" height="48" loading="eager" />
                         </div>
                     </div>
 

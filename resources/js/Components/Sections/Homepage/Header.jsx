@@ -73,6 +73,7 @@ export default function Header() {
                                 className="h-[58px] w-auto"
                                 width="114"
                                 height="58"
+                                fetchpriority="high"
                             />
                         </a>
 
