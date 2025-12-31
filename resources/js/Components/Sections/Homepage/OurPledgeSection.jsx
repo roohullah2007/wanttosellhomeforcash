@@ -37,9 +37,12 @@ export default function OurPledgeSection() {
                     {/* Right - Image */}
                     <div className="relative order-first lg:order-last">
                         <img
-                            src="/images/our-pledge.png"
+                            src="/images/our-pledge.webp"
                             alt="We Buy Houses In Any Condition"
                             className="w-full h-[280px] md:h-[400px] lg:h-[500px] rounded-2xl object-cover"
+                            loading="lazy"
+                            width="800"
+                            height="600"
                         />
                     </div>
                 </div>

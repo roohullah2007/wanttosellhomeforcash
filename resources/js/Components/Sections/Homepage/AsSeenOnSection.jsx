@@ -7,13 +7,13 @@ export default function AsSeenOnSection() {
     ];
 
     return (
-        <div className="bg-primary">
-            <div className="w-full max-w-[1250px] mx-auto px-4 sm:px-6 py-6 md:py-8">
+        <div className="bg-[#0A3060]">
+            <div className="w-full max-w-[1250px] mx-auto px-4 sm:px-6 py-4 md:py-5">
                 <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
                     <span className="text-white text-sm font-semibold uppercase tracking-wider">As Seen On</span>
                     <div className="flex items-center justify-center gap-8 md:gap-12 flex-wrap">
                         {logos.map((logo, index) => (
-                            <div key={index} className="bg-[#012447] rounded-xl px-6 py-3 flex items-center justify-center">
+                            <div key={index} className="px-4 py-1 flex items-center justify-center">
                                 <img
                                     src={logo.src}
                                     alt={logo.alt}

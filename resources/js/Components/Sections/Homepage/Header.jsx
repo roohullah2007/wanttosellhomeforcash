@@ -68,9 +68,11 @@ export default function Header() {
                         {/* Logo */}
                         <a href="/" className="flex items-center">
                             <img
-                                src="/images/logo.png"
+                                src="/images/logo.webp"
                                 alt="WantToSellHomeForCash"
-                                className="h-12 w-auto"
+                                className="h-[58px] w-auto"
+                                width="114"
+                                height="58"
                             />
                         </a>
 

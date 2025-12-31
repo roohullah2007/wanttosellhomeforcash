@@ -21,9 +21,10 @@ export default function Footer() {
             <div className="w-full bg-cover bg-center bg-no-repeat relative">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1920"
+                        src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1280"
                         alt="Footer Background"
                         className="w-full h-full object-cover"
+                        loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-b from-primary/90 via-primary/85 to-primary/95"></div>
                 </div>
@@ -62,20 +63,15 @@ export default function Footer() {
                         <div className="lg:col-span-5 text-center md:text-left">
                             <div className="mb-6 md:mb-8 flex justify-center md:justify-start">
                                 <img
-                                    src="/images/logo.png"
+                                    src="/images/logo.webp"
                                     alt="Want To Sell Home For Cash"
                                     className="h-10 md:h-12 w-auto"
                                 />
                             </div>
 
-                            <p className="text-text-light text-sm md:text-base font-normal leading-relaxed mb-4 md:mb-6">
+                            <p className="text-text-light text-sm md:text-base font-normal leading-relaxed">
                                 We buy houses in any condition for cash. Fast closing, no fees, no hassle. Get your fair cash offer today!
                             </p>
-
-                            <div>
-                                <p className="text-text-light text-xs md:text-sm font-normal mb-1">Address</p>
-                                <p className="text-text text-base md:text-lg font-medium">Your City, State</p>
-                            </div>
                         </div>
 
                         {/* Right Columns - Links */}

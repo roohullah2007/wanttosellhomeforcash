@@ -74,12 +74,9 @@ export default function HeroSection() {
                         <div className="bg-white rounded-2xl shadow-2xl border-4 border-primary overflow-hidden w-full max-w-[447px]">
                             {/* Form Header */}
                             <div className="text-left pt-6 md:pt-8 pb-3 md:pb-4 px-4 md:px-8">
-                                <h2 className="text-[22px] md:text-[28px] font-bold text-text mb-1">
+                                <h2 className="text-[22px] md:text-[28px] font-bold text-text mb-2 md:mb-3">
                                     Receive a Fair Cash Offer
                                 </h2>
-                                <p className="text-primary text-lg md:text-xl font-bold uppercase tracking-wide mb-2 md:mb-3">
-                                    IN ONLY 3 MINUTES!
-                                </p>
                                 <p className="text-text-light text-sm md:text-base">
                                     Fill out the form below to connect with us!
                                 </p>

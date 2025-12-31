@@ -137,6 +137,9 @@ function TestimonialCard({ testimonial, isMobile }) {
                     src={testimonial.image}
                     alt={testimonial.author}
                     className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover"
+                    loading="lazy"
+                    width="56"
+                    height="56"
                 />
                 <div>
                     <h4 className="text-base md:text-[18px] font-semibold mb-0.5 md:mb-1 text-text">
