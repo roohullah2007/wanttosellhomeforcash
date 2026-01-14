@@ -34,49 +34,74 @@ export default function ContactSection() {
         }
     }, [recaptchaSiteKey]);
 
+    // Google Places Autocomplete setup
     useEffect(() => {
         const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
         if (!apiKey) return;
 
-        // Check if script already loaded
+        let checkInterval = null;
+        let isInitialized = false;
+
+        const initAutocomplete = () => {
+            if (isInitialized || !addressInputRef.current || !window.google?.maps?.places) return;
+
+            isInitialized = true;
+
+            autocompleteRef.current = new window.google.maps.places.Autocomplete(
+                addressInputRef.current,
+                {
+                    types: ['address'],
+                    componentRestrictions: { country: 'us' },
+                }
+            );
+
+            autocompleteRef.current.addListener('place_changed', () => {
+                const place = autocompleteRef.current.getPlace();
+                if (place.formatted_address) {
+                    setData('property_address', place.formatted_address);
+                }
+            });
+        };
+
+        const waitForGoogleAndInit = () => {
+            checkInterval = setInterval(() => {
+                if (window.google?.maps?.places && addressInputRef.current) {
+                    clearInterval(checkInterval);
+                    checkInterval = null;
+                    initAutocomplete();
+                }
+            }, 100);
+        };
+
+        // Check if script already loaded and ready
         if (window.google?.maps?.places) {
-            initAutocomplete();
-            return;
+            // Small delay to ensure input ref is attached
+            setTimeout(initAutocomplete, 0);
+        } else if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
+            // Load Google Places API script
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+            script.async = true;
+            script.defer = true;
+            script.onload = () => {
+                setTimeout(initAutocomplete, 0);
+            };
+            document.head.appendChild(script);
+        } else {
+            // Script exists but may still be loading
+            waitForGoogleAndInit();
         }
 
-        // Load Google Places API script
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-        script.async = true;
-        script.defer = true;
-        script.onload = initAutocomplete;
-        document.head.appendChild(script);
-
         return () => {
+            if (checkInterval) {
+                clearInterval(checkInterval);
+            }
             if (autocompleteRef.current) {
                 window.google?.maps?.event?.clearInstanceListeners(autocompleteRef.current);
+                autocompleteRef.current = null;
             }
         };
     }, []);
-
-    const initAutocomplete = () => {
-        if (!addressInputRef.current || !window.google?.maps?.places) return;
-
-        autocompleteRef.current = new window.google.maps.places.Autocomplete(
-            addressInputRef.current,
-            {
-                types: ['address'],
-                componentRestrictions: { country: 'us' },
-            }
-        );
-
-        autocompleteRef.current.addListener('place_changed', () => {
-            const place = autocompleteRef.current.getPlace();
-            if (place.formatted_address) {
-                setData('property_address', place.formatted_address);
-            }
-        });
-    };
 
     // Convert formatted phone to plain: +11234567890
     const getPlainPhone = (formatted) => {
