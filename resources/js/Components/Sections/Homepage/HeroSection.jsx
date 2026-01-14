@@ -27,19 +27,41 @@ export default function HeroSection() {
 
     const recaptchaRef = useRef(null);
     const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+    const [recaptchaRendered, setRecaptchaRendered] = useState(false);
 
     // Initialize reCAPTCHA when component mounts
     useEffect(() => {
-        if (recaptchaSiteKey && window.grecaptcha && recaptchaRef.current) {
-            try {
-                window.grecaptcha.render(recaptchaRef.current, {
-                    sitekey: recaptchaSiteKey,
-                    callback: (token) => setData('recaptcha_token', token),
-                    'expired-callback': () => setData('recaptcha_token', ''),
-                });
-            } catch (e) {
-                // Already rendered
+        if (!recaptchaSiteKey || !recaptchaRef.current) return;
+
+        const initRecaptcha = () => {
+            if (window.grecaptcha && window.grecaptcha.render) {
+                try {
+                    window.grecaptcha.render(recaptchaRef.current, {
+                        sitekey: recaptchaSiteKey,
+                        callback: (token) => setData('recaptcha_token', token),
+                        'expired-callback': () => setData('recaptcha_token', ''),
+                    });
+                    setRecaptchaRendered(true);
+                } catch (e) {
+                    // Already rendered or error
+                }
             }
+        };
+
+        // Check if grecaptcha is ready
+        if (window.grecaptcha && window.grecaptcha.render) {
+            initRecaptcha();
+        } else {
+            // Wait for grecaptcha to be ready
+            const checkRecaptcha = setInterval(() => {
+                if (window.grecaptcha && window.grecaptcha.render) {
+                    clearInterval(checkRecaptcha);
+                    initRecaptcha();
+                }
+            }, 100);
+
+            // Cleanup after 10 seconds if not loaded
+            setTimeout(() => clearInterval(checkRecaptcha), 10000);
         }
     }, [recaptchaSiteKey]);
 
@@ -315,7 +337,7 @@ export default function HeroSection() {
                                 {/* Submit Button */}
                                 <button
                                     type="submit"
-                                    disabled={processing || !data.consent || (recaptchaSiteKey && !data.recaptcha_token)}
+                                    disabled={processing || !data.consent || (recaptchaRendered && !data.recaptcha_token)}
                                     className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3.5 md:py-4 px-6 rounded-lg transition-all duration-300 text-base md:text-lg mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {processing ? 'Submitting...' : 'Get A Quick Cash Offer Now!'}
