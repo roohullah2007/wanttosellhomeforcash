@@ -42,6 +42,36 @@ export default function TermsOfService() {
                                 </section>
 
                                 <section className="mb-8">
+                                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">Communication Consent</h2>
+                                    <p className="text-gray-600 mb-4">
+                                        By submitting a form on this website, you expressly consent to the following:
+                                    </p>
+                                    <ul className="list-disc pl-6 text-gray-600 mb-4 space-y-2">
+                                        <li>You authorize Want To Sell Home For Cash and its affiliates to contact you via phone calls (including autodialed and pre-recorded calls), SMS/text messages, and emails</li>
+                                        <li>You understand this consent is not required as a condition to receive our services or submit your property information</li>
+                                        <li>You confirm that the phone number provided is yours and that you are authorized to provide consent for communications to that number</li>
+                                        <li>You acknowledge that message and data rates may apply for SMS communications</li>
+                                    </ul>
+                                </section>
+
+                                <section className="mb-8">
+                                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">SMS Terms & Conditions</h2>
+                                    <p className="text-gray-600 mb-4">
+                                        By opting in to SMS communications, you agree to receive text messages from Want To Sell Home For Cash regarding your property inquiry and our services. Key terms:
+                                    </p>
+                                    <ul className="list-disc pl-6 text-gray-600 mb-4 space-y-2">
+                                        <li><strong>Frequency:</strong> Message frequency varies based on your inquiry</li>
+                                        <li><strong>Opt-Out:</strong> Text STOP to unsubscribe from SMS messages at any time</li>
+                                        <li><strong>Help:</strong> Text HELP for assistance</li>
+                                        <li><strong>Costs:</strong> Message and data rates may apply</li>
+                                        <li><strong>Carriers:</strong> Major US carriers supported. Carriers are not liable for delayed or undelivered messages</li>
+                                    </ul>
+                                    <p className="text-gray-600 mb-4">
+                                        For questions about SMS communications, contact us at (786) 949-9602 or info@wanttosellhomeforcash.com.
+                                    </p>
+                                </section>
+
+                                <section className="mb-8">
                                     <h2 className="text-2xl font-semibold text-gray-900 mb-4">Content on This Application</h2>
                                     <p className="text-gray-600 mb-4">
                                         All content accessible through this Application's platform is either owned or provided by the Owner or its licensors, unless where specified otherwise.

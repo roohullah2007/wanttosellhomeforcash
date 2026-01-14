@@ -21,7 +21,27 @@ export default function HeroSection() {
         phone: '',
         email: '',
         source: 'hero_form',
+        consent: false,
+        recaptcha_token: '',
     });
+
+    const recaptchaRef = useRef(null);
+    const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
+    // Initialize reCAPTCHA when component mounts
+    useEffect(() => {
+        if (recaptchaSiteKey && window.grecaptcha && recaptchaRef.current) {
+            try {
+                window.grecaptcha.render(recaptchaRef.current, {
+                    sitekey: recaptchaSiteKey,
+                    callback: (token) => setData('recaptcha_token', token),
+                    'expired-callback': () => setData('recaptcha_token', ''),
+                });
+            } catch (e) {
+                // Already rendered
+            }
+        }
+    }, [recaptchaSiteKey]);
 
     // Google Places Autocomplete setup
     useEffect(() => {
@@ -78,9 +98,43 @@ export default function HeroSection() {
         };
     }, []);
 
+    // Convert formatted phone to plain: +11234567890
+    const getPlainPhone = (formatted) => {
+        const digits = formatted.replace(/\D/g, '').replace(/^1/, '');
+        return digits ? `+1${digits}` : '';
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('lead.store'));
+        post(route('lead.store'), {
+            transform: (formData) => ({
+                ...formData,
+                phone: getPlainPhone(formData.phone),
+            }),
+        });
+    };
+
+    // Format phone number as +1 (XXX) XXX-XXXX
+    const formatPhoneNumber = (value) => {
+        // Remove all non-numeric characters
+        const numbers = value.replace(/\D/g, '');
+
+        // Remove leading 1 if present (we'll add +1 automatically)
+        const cleaned = numbers.startsWith('1') ? numbers.slice(1) : numbers;
+
+        // Limit to 10 digits
+        const limited = cleaned.slice(0, 10);
+
+        // Format based on length
+        if (limited.length === 0) return '';
+        if (limited.length <= 3) return `+1 (${limited}`;
+        if (limited.length <= 6) return `+1 (${limited.slice(0, 3)}) ${limited.slice(3)}`;
+        return `+1 (${limited.slice(0, 3)}) ${limited.slice(3, 6)}-${limited.slice(6)}`;
+    };
+
+    const handlePhoneChange = (e) => {
+        const formatted = formatPhoneNumber(e.target.value);
+        setData('phone', formatted);
     };
 
     // Green check circle SVG component
@@ -196,9 +250,9 @@ export default function HeroSection() {
                                             type="tel"
                                             required
                                             value={data.phone}
-                                            onChange={(e) => setData('phone', e.target.value)}
+                                            onChange={handlePhoneChange}
                                             className="w-full px-3 md:px-4 py-3 md:py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white text-gray-600 text-sm md:text-base"
-                                            placeholder="Phone Number"
+                                            placeholder="+1 (123) 456-7890"
                                         />
                                         {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                                     </div>
@@ -217,10 +271,36 @@ export default function HeroSection() {
                                     </div>
                                 </div>
 
+                                {/* Compliance Checkbox */}
+                                <div className="flex items-start gap-2">
+                                    <input
+                                        type="checkbox"
+                                        id="consent_hero"
+                                        required
+                                        checked={data.consent}
+                                        onChange={(e) => setData('consent', e.target.checked)}
+                                        className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                                    />
+                                    <label htmlFor="consent_hero" className="text-xs text-gray-600 leading-tight">
+                                        By checking this box, I agree to be contacted by Want To Sell Home For Cash or its affiliates via call, email, or text. I understand that my consent is not a condition of purchase. I agree to the{' '}
+                                        <a href="/terms-of-service" className="text-primary underline">Terms of Service</a> and{' '}
+                                        <a href="/privacy-policy" className="text-primary underline">Privacy Policy</a>.
+                                    </label>
+                                </div>
+                                {errors.consent && <p className="text-red-500 text-xs mt-1">{errors.consent}</p>}
+
+                                {/* Google reCAPTCHA */}
+                                {recaptchaSiteKey && (
+                                    <div className="flex justify-center">
+                                        <div ref={recaptchaRef}></div>
+                                    </div>
+                                )}
+                                {errors.recaptcha_token && <p className="text-red-500 text-xs text-center">{errors.recaptcha_token}</p>}
+
                                 {/* Submit Button */}
                                 <button
                                     type="submit"
-                                    disabled={processing}
+                                    disabled={processing || !data.consent || (recaptchaSiteKey && !data.recaptcha_token)}
                                     className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3.5 md:py-4 px-6 rounded-lg transition-all duration-300 text-base md:text-lg mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {processing ? 'Submitting...' : 'Get A Quick Cash Offer Now!'}

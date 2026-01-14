@@ -53,6 +53,44 @@ export default function PrivacyPolicy() {
                                 </section>
 
                                 <section className="mb-8">
+                                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">TCPA Consent & Communication Preferences</h2>
+                                    <p className="text-gray-600 mb-4">
+                                        By providing your phone number and submitting a form on our website, you expressly consent to receive communications from Want To Sell Home For Cash, its affiliates, and authorized third parties. These communications may include:
+                                    </p>
+                                    <ul className="list-disc pl-6 text-gray-600 mb-4 space-y-2">
+                                        <li>Phone calls (including autodialed and pre-recorded calls)</li>
+                                        <li>SMS/text messages</li>
+                                        <li>Emails regarding your property inquiry</li>
+                                    </ul>
+                                    <p className="text-gray-600 mb-4">
+                                        You understand that your consent is not a condition of purchase. Message and data rates may apply. Message frequency varies. You can opt-out at any time by replying STOP to any text message or by contacting us directly.
+                                    </p>
+                                    <p className="text-gray-600 mb-4">
+                                        <strong>To opt-out of SMS messages:</strong> Reply STOP to any message<br />
+                                        <strong>To opt-out of calls:</strong> Request removal during any call or contact us<br />
+                                        <strong>To opt-out of emails:</strong> Click unsubscribe in any email
+                                    </p>
+                                </section>
+
+                                <section className="mb-8">
+                                    <h2 className="text-2xl font-semibold text-gray-900 mb-4">SMS/Text Messaging Terms</h2>
+                                    <p className="text-gray-600 mb-4">
+                                        When you opt-in to receive SMS messages from us, you agree to the following:
+                                    </p>
+                                    <ul className="list-disc pl-6 text-gray-600 mb-4 space-y-2">
+                                        <li>We may send you text messages about your property inquiry, cash offers, and related services</li>
+                                        <li>Message frequency varies based on your inquiry status</li>
+                                        <li>Standard message and data rates may apply depending on your carrier</li>
+                                        <li>Text STOP to cancel at any time. After texting STOP, you will receive a confirmation message</li>
+                                        <li>Text HELP for assistance or contact us at (786) 949-9602</li>
+                                        <li>Carriers are not liable for delayed or undelivered messages</li>
+                                    </ul>
+                                    <p className="text-gray-600 mb-4">
+                                        <strong>Supported Carriers:</strong> AT&T, Verizon, T-Mobile, Sprint, and most major US carriers.
+                                    </p>
+                                </section>
+
+                                <section className="mb-8">
                                     <h2 className="text-2xl font-semibold text-gray-900 mb-4">Log Data</h2>
                                     <p className="text-gray-600 mb-4">
                                         When you visit the Site, our servers automatically record information that your browser sends whenever you visit a website ("Log Data"). This Log Data may include information such as your IP address, browser type or the domain from which you are visiting, the web-pages you visit, the search terms you use, and any advertisements on which you click. For most users accessing the Internet from an Internet service provider the IP address will be different every time you log on. We use Log Data to monitor the use of the Site and of our Service, and for the Site's technical administration. We do not associate your IP address with any other personally identifiable information to identify you personally, except in case of violation of the Terms of Service.

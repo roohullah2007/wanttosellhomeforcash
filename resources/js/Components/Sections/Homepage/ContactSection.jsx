@@ -10,10 +10,29 @@ export default function ContactSection() {
         property_address: '',
         message: '',
         source: 'contact_form',
+        consent: false,
+        recaptcha_token: '',
     });
 
     const addressInputRef = useRef(null);
     const autocompleteRef = useRef(null);
+    const recaptchaRef = useRef(null);
+    const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
+    // Initialize reCAPTCHA
+    useEffect(() => {
+        if (recaptchaSiteKey && window.grecaptcha && recaptchaRef.current) {
+            try {
+                window.grecaptcha.render(recaptchaRef.current, {
+                    sitekey: recaptchaSiteKey,
+                    callback: (token) => setData('recaptcha_token', token),
+                    'expired-callback': () => setData('recaptcha_token', ''),
+                });
+            } catch (e) {
+                // Already rendered
+            }
+        }
+    }, [recaptchaSiteKey]);
 
     useEffect(() => {
         const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
@@ -59,9 +78,37 @@ export default function ContactSection() {
         });
     };
 
+    // Convert formatted phone to plain: +11234567890
+    const getPlainPhone = (formatted) => {
+        const digits = formatted.replace(/\D/g, '').replace(/^1/, '');
+        return digits ? `+1${digits}` : '';
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('lead.store'));
+        post(route('lead.store'), {
+            transform: (formData) => ({
+                ...formData,
+                phone: getPlainPhone(formData.phone),
+            }),
+        });
+    };
+
+    // Format phone number as +1 (XXX) XXX-XXXX
+    const formatPhoneNumber = (value) => {
+        const numbers = value.replace(/\D/g, '');
+        const cleaned = numbers.startsWith('1') ? numbers.slice(1) : numbers;
+        const limited = cleaned.slice(0, 10);
+
+        if (limited.length === 0) return '';
+        if (limited.length <= 3) return `+1 (${limited}`;
+        if (limited.length <= 6) return `+1 (${limited.slice(0, 3)}) ${limited.slice(3)}`;
+        return `+1 (${limited.slice(0, 3)}) ${limited.slice(3, 6)}-${limited.slice(6)}`;
+    };
+
+    const handlePhoneChange = (e) => {
+        const formatted = formatPhoneNumber(e.target.value);
+        setData('phone', formatted);
     };
 
     return (
@@ -137,9 +184,9 @@ export default function ContactSection() {
                                         type="tel"
                                         required
                                         value={data.phone}
-                                        onChange={(e) => setData('phone', e.target.value)}
+                                        onChange={handlePhoneChange}
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                                        placeholder="(555) 123-4567"
+                                        placeholder="+1 (123) 456-7890"
                                     />
                                     {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                                 </div>
@@ -167,16 +214,42 @@ export default function ContactSection() {
                                     placeholder="Tell us about your property..."
                                 />
                             </div>
+                            {/* Compliance Checkbox */}
+                            <div className="flex items-start gap-2">
+                                <input
+                                    type="checkbox"
+                                    id="consent_contact"
+                                    required
+                                    checked={data.consent}
+                                    onChange={(e) => setData('consent', e.target.checked)}
+                                    className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                                />
+                                <label htmlFor="consent_contact" className="text-xs text-gray-600 leading-tight">
+                                    By checking this box, I agree to be contacted by Want To Sell Home For Cash or its affiliates via call, email, or text. I understand that my consent is not a condition of purchase. I agree to the{' '}
+                                    <a href="/terms-of-service" className="text-primary underline">Terms of Service</a> and{' '}
+                                    <a href="/privacy-policy" className="text-primary underline">Privacy Policy</a>.
+                                </label>
+                            </div>
+                            {errors.consent && <p className="text-red-500 text-xs mt-1">{errors.consent}</p>}
+
+                            {/* Google reCAPTCHA */}
+                            {recaptchaSiteKey && (
+                                <div className="flex justify-center">
+                                    <div ref={recaptchaRef}></div>
+                                </div>
+                            )}
+                            {errors.recaptcha_token && <p className="text-red-500 text-xs text-center">{errors.recaptcha_token}</p>}
+
                             <button
                                 type="submit"
-                                disabled={processing}
+                                disabled={processing || !data.consent || (recaptchaSiteKey && !data.recaptcha_token)}
                                 className="w-full inline-flex items-center justify-center gap-2 bg-primary text-white rounded-full px-6 py-4 font-medium transition-all duration-300 hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <span>{processing ? 'Submitting...' : 'Get My Cash Offer Now'}</span>
                                 {!processing && <ArrowRight className="w-5 h-5" />}
                             </button>
                             <p className="text-xs text-text-light text-center">
-                                By submitting this form, you agree to be contacted about your property. No obligation.
+                                100% Free & Confidential. No obligation.
                             </p>
                         </form>
                     </div>

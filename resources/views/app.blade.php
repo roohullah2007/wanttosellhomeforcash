@@ -77,6 +77,9 @@
         <link rel="preload" href="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800" as="image" media="(max-width: 768px)">
         <link rel="preload" href="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1280" as="image" media="(min-width: 769px)">
 
+        <!-- Google reCAPTCHA v2 -->
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
         <!-- Scripts -->
         @routes
         @viteReactRefresh

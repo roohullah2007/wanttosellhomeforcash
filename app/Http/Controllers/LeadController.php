@@ -15,6 +15,21 @@ class LeadController extends Controller
 {
     public function store(Request $request)
     {
+        // Verify reCAPTCHA if configured
+        $recaptchaSecret = config('services.recaptcha.secret_key');
+        if ($recaptchaSecret) {
+            $recaptchaToken = $request->input('recaptcha_token');
+
+            if (empty($recaptchaToken)) {
+                return back()->withErrors(['recaptcha_token' => 'Please complete the reCAPTCHA verification.']);
+            }
+
+            $recaptchaValid = $this->verifyRecaptcha($recaptchaToken, $recaptchaSecret);
+            if (!$recaptchaValid) {
+                return back()->withErrors(['recaptcha_token' => 'reCAPTCHA verification failed. Please try again.']);
+            }
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -91,5 +106,21 @@ class LeadController extends Controller
     public function thankYou()
     {
         return Inertia::render('ThankYou');
+    }
+
+    protected function verifyRecaptcha(string $token, string $secret): bool
+    {
+        try {
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => $secret,
+                'response' => $token,
+            ]);
+
+            $result = $response->json();
+            return $result['success'] ?? false;
+        } catch (\Exception $e) {
+            Log::error('reCAPTCHA verification failed: ' . $e->getMessage());
+            return false;
+        }
     }
 }
