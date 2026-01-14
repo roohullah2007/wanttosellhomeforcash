@@ -48,8 +48,13 @@ export default function HeroSection() {
         const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
         if (!apiKey) return;
 
+        let checkInterval = null;
+        let isInitialized = false;
+
         const initAutocomplete = () => {
-            if (!addressInputRef.current || !window.google?.maps?.places) return;
+            if (isInitialized || !addressInputRef.current || !window.google?.maps?.places) return;
+
+            isInitialized = true;
 
             autocompleteRef.current = new window.google.maps.places.Autocomplete(
                 addressInputRef.current,
@@ -67,33 +72,43 @@ export default function HeroSection() {
             });
         };
 
-        // Check if script already loaded
-        if (window.google?.maps?.places) {
-            initAutocomplete();
-            return;
-        }
+        const waitForGoogleAndInit = () => {
+            checkInterval = setInterval(() => {
+                if (window.google?.maps?.places && addressInputRef.current) {
+                    clearInterval(checkInterval);
+                    checkInterval = null;
+                    initAutocomplete();
+                }
+            }, 100);
+        };
 
-        // Load Google Places API script if not already loaded
-        if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
+        // Check if script already loaded and ready
+        if (window.google?.maps?.places) {
+            // Small delay to ensure input ref is attached
+            setTimeout(initAutocomplete, 0);
+        } else if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
+            // Load Google Places API script
             const script = document.createElement('script');
             script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
             script.async = true;
             script.defer = true;
-            script.onload = initAutocomplete;
+            script.onload = () => {
+                // Wait a tick for React to finish rendering
+                setTimeout(initAutocomplete, 0);
+            };
             document.head.appendChild(script);
         } else {
             // Script exists but may still be loading
-            const checkGoogle = setInterval(() => {
-                if (window.google?.maps?.places) {
-                    clearInterval(checkGoogle);
-                    initAutocomplete();
-                }
-            }, 100);
+            waitForGoogleAndInit();
         }
 
         return () => {
+            if (checkInterval) {
+                clearInterval(checkInterval);
+            }
             if (autocompleteRef.current) {
                 window.google?.maps?.event?.clearInstanceListeners(autocompleteRef.current);
+                autocompleteRef.current = null;
             }
         };
     }, []);
