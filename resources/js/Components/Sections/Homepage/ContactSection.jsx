@@ -1,4 +1,5 @@
 import { useForm } from '@inertiajs/react';
+import { useEffect, useRef } from 'react';
 import { Zap, Shield, Handshake, ArrowRight } from 'lucide-react';
 
 export default function ContactSection() {
@@ -10,6 +11,53 @@ export default function ContactSection() {
         message: '',
         source: 'contact_form',
     });
+
+    const addressInputRef = useRef(null);
+    const autocompleteRef = useRef(null);
+
+    useEffect(() => {
+        const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
+        if (!apiKey) return;
+
+        // Check if script already loaded
+        if (window.google?.maps?.places) {
+            initAutocomplete();
+            return;
+        }
+
+        // Load Google Places API script
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+        script.async = true;
+        script.defer = true;
+        script.onload = initAutocomplete;
+        document.head.appendChild(script);
+
+        return () => {
+            if (autocompleteRef.current) {
+                window.google?.maps?.event?.clearInstanceListeners(autocompleteRef.current);
+            }
+        };
+    }, []);
+
+    const initAutocomplete = () => {
+        if (!addressInputRef.current || !window.google?.maps?.places) return;
+
+        autocompleteRef.current = new window.google.maps.places.Autocomplete(
+            addressInputRef.current,
+            {
+                types: ['address'],
+                componentRestrictions: { country: 'us' },
+            }
+        );
+
+        autocompleteRef.current.addListener('place_changed', () => {
+            const place = autocompleteRef.current.getPlace();
+            if (place.formatted_address) {
+                setData('property_address', place.formatted_address);
+            }
+        });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -99,12 +147,13 @@ export default function ContactSection() {
                             <div>
                                 <label className="block text-sm font-medium text-text mb-2">Property Address *</label>
                                 <input
+                                    ref={addressInputRef}
                                     type="text"
                                     required
                                     value={data.property_address}
                                     onChange={(e) => setData('property_address', e.target.value)}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                                    placeholder="123 Main St, City, State ZIP"
+                                    placeholder="Start typing your address..."
                                 />
                                 {errors.property_address && <p className="text-red-500 text-sm mt-1">{errors.property_address}</p>}
                             </div>

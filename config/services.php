@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'google' => [
+        'places_api_key' => env('VITE_GOOGLE_PLACES_API_KEY'),
+    ],
+
 ];

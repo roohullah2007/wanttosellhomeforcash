@@ -19,6 +19,7 @@ export default function AdminLayout({ children, title }) {
     const navigation = [
         { name: 'Dashboard', href: route('admin.dashboard'), icon: LayoutDashboard, current: route().current('admin.dashboard') },
         { name: 'Leads', href: route('admin.leads.index'), icon: Users, current: route().current('admin.leads.*') },
+        { name: 'Settings', href: route('admin.settings'), icon: Settings, current: route().current('admin.settings*') },
     ];
 
     return (

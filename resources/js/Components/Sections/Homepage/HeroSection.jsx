@@ -1,8 +1,10 @@
 import { useForm } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function HeroSection() {
     const [bgImage, setBgImage] = useState('');
+    const addressInputRef = useRef(null);
+    const autocompleteRef = useRef(null);
 
     useEffect(() => {
         // Use smaller image for mobile, larger for desktop
@@ -20,6 +22,61 @@ export default function HeroSection() {
         email: '',
         source: 'hero_form',
     });
+
+    // Google Places Autocomplete setup
+    useEffect(() => {
+        const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
+        if (!apiKey) return;
+
+        const initAutocomplete = () => {
+            if (!addressInputRef.current || !window.google?.maps?.places) return;
+
+            autocompleteRef.current = new window.google.maps.places.Autocomplete(
+                addressInputRef.current,
+                {
+                    types: ['address'],
+                    componentRestrictions: { country: 'us' },
+                }
+            );
+
+            autocompleteRef.current.addListener('place_changed', () => {
+                const place = autocompleteRef.current.getPlace();
+                if (place.formatted_address) {
+                    setData('property_address', place.formatted_address);
+                }
+            });
+        };
+
+        // Check if script already loaded
+        if (window.google?.maps?.places) {
+            initAutocomplete();
+            return;
+        }
+
+        // Load Google Places API script if not already loaded
+        if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+            script.async = true;
+            script.defer = true;
+            script.onload = initAutocomplete;
+            document.head.appendChild(script);
+        } else {
+            // Script exists but may still be loading
+            const checkGoogle = setInterval(() => {
+                if (window.google?.maps?.places) {
+                    clearInterval(checkGoogle);
+                    initAutocomplete();
+                }
+            }, 100);
+        }
+
+        return () => {
+            if (autocompleteRef.current) {
+                window.google?.maps?.event?.clearInstanceListeners(autocompleteRef.current);
+            }
+        };
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -102,12 +159,13 @@ export default function HeroSection() {
                                         Property Address <span className="text-red-500">*</span>
                                     </label>
                                     <input
+                                        ref={addressInputRef}
                                         type="text"
                                         required
                                         value={data.property_address}
                                         onChange={(e) => setData('property_address', e.target.value)}
                                         className="w-full px-3 md:px-4 py-3 md:py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white text-gray-600 text-sm md:text-base"
-                                        placeholder="Enter Zip Code or Address (Required)"
+                                        placeholder="Start typing your address..."
                                     />
                                     {errors.property_address && <p className="text-red-500 text-sm mt-1">{errors.property_address}</p>}
                                 </div>

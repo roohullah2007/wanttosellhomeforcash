@@ -1,8 +1,23 @@
 import { Head, Link } from '@inertiajs/react';
+import { useEffect } from 'react';
 import { CheckCircle, Phone, Clock, Home } from 'lucide-react';
 import { TopBar, Header, Footer } from '@/Components/Sections/Homepage';
 
 export default function ThankYou() {
+    useEffect(() => {
+        // Facebook Pixel - Track Form Submission Conversion
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'Lead');
+        }
+
+        // Google Ads Conversion Tracking (if configured)
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'conversion', {
+                'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL'
+            });
+        }
+    }, []);
+
     return (
         <>
             <Head title="Thank You - We've Received Your Request" />
