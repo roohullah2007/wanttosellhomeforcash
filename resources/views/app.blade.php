@@ -6,6 +6,32 @@
         <meta name="theme-color" content="#053E78">
         <meta name="mobile-web-app-capable" content="yes">
 
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-KWVM6R9B');</script>
+        <!-- End Google Tag Manager -->
+
+        <!-- Google tag (gtag.js) - AW-16921935924 -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16921935924"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-16921935924');
+        </script>
+
+        <!-- Google tag (gtag.js) - AW-11477356180 with Phone Conversion -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11477356180"></script>
+        <script>
+        gtag('config', 'AW-11477356180');
+        gtag('config', 'AW-11477356180/BfxpCPDc94wZEJSd6uAq', {
+            'phone_conversion_number': '(786) 949-9602'
+        });
+        </script>
+
         <!-- Meta Pixel Code -->
         <script>
         !function(f,b,e,v,n,t,s)
@@ -58,6 +84,11 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWVM6R9B"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+
         @inertia
     </body>
 </html>
