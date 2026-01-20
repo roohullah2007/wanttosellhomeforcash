@@ -257,7 +257,7 @@ export default function HeroSection() {
 
                     {/* Right - Form */}
                     <div className="w-full flex justify-center lg:justify-end order-1 lg:order-2">
-                        <div className="bg-white rounded-2xl shadow-2xl border-4 border-primary overflow-hidden w-full max-w-[447px]">
+                        <div className="bg-white rounded-2xl shadow-2xl border-4 border-primary overflow-hidden w-full max-w-[520px]">
                             {/* Form Header */}
                             <div className="text-left pt-6 md:pt-8 pb-3 md:pb-4 px-4 md:px-8">
                                 <h2 className="text-[22px] md:text-[28px] font-bold text-text mb-2 md:mb-3">
