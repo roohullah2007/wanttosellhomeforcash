@@ -35,8 +35,16 @@ class LeadController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'required|string|max:20',
             'property_address' => 'required|string|max:500',
+            'is_homeowner' => 'nullable|boolean',
+            'is_property_listed' => 'nullable|boolean',
             'message' => 'nullable|string|max:2000',
+            'consent' => 'required|boolean|accepted',
             'source' => 'nullable|string|max:50',
+            'utm_source' => 'nullable|string|max:255',
+            'utm_medium' => 'nullable|string|max:255',
+            'utm_campaign' => 'nullable|string|max:255',
+            'utm_term' => 'nullable|string|max:255',
+            'utm_content' => 'nullable|string|max:255',
         ]);
 
         $lead = Lead::create($validated);
@@ -47,7 +55,18 @@ class LeadController extends Controller
         // Send email notifications if enabled
         $this->sendEmailNotifications($lead);
 
-        return redirect()->route('thank-you');
+        // Determine lead qualification and redirect accordingly
+        // VIABLE: homeowner = true AND property is NOT listed (is_property_listed = false)
+        // NON-VIABLE: not homeowner OR property is listed
+        $isViable = $lead->is_homeowner === true && $lead->is_property_listed === false;
+
+        if ($isViable) {
+            // Viable leads go to thank-you page (tracked in Google Ads)
+            return redirect()->route('thank-you');
+        } else {
+            // Non-viable leads go to confirmed page (not tracked in Google Ads)
+            return redirect()->route('confirmed');
+        }
     }
 
     protected function sendToZapier(Lead $lead): void
@@ -68,8 +87,16 @@ class LeadController extends Controller
                 'email' => $lead->email,
                 'phone' => $lead->phone,
                 'property_address' => $lead->property_address,
+                'is_homeowner' => $lead->is_homeowner,
+                'is_property_listed' => $lead->is_property_listed,
                 'message' => $lead->message,
+                'consent' => $lead->consent,
                 'source' => $lead->source,
+                'utm_source' => $lead->utm_source,
+                'utm_medium' => $lead->utm_medium,
+                'utm_campaign' => $lead->utm_campaign,
+                'utm_term' => $lead->utm_term,
+                'utm_content' => $lead->utm_content,
                 'created_at' => $lead->created_at->toIso8601String(),
             ]);
         } catch (\Exception $e) {
@@ -106,6 +133,11 @@ class LeadController extends Controller
     public function thankYou()
     {
         return Inertia::render('ThankYou');
+    }
+
+    public function confirmed()
+    {
+        return Inertia::render('Confirmed');
     }
 
     protected function verifyRecaptcha(string $token, string $secret): bool

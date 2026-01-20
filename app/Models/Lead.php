@@ -14,13 +14,24 @@ class Lead extends Model
         'email',
         'phone',
         'property_address',
+        'is_homeowner',
+        'is_property_listed',
         'message',
+        'consent',
         'source',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_term',
+        'utm_content',
         'status',
         'notes',
     ];
 
     protected $casts = [
+        'is_homeowner' => 'boolean',
+        'is_property_listed' => 'boolean',
+        'consent' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

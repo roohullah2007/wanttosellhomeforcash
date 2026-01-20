@@ -16,6 +16,7 @@ Route::get('/', function () {
 // Lead submission routes
 Route::post('/submit-lead', [LeadController::class, 'store'])->name('lead.store');
 Route::get('/thank-you', [LeadController::class, 'thankYou'])->name('thank-you');
+Route::get('/confirmed', [LeadController::class, 'confirmed'])->name('confirmed');
 
 // Static pages
 Route::get('/privacy-policy', function () {

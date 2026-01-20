@@ -20,10 +20,36 @@ export default function HeroSection() {
         name: '',
         phone: '',
         email: '',
+        is_homeowner: '',
+        is_property_listed: '',
         source: 'hero_form',
         consent: false,
         recaptcha_token: '',
+        utm_source: '',
+        utm_medium: '',
+        utm_campaign: '',
+        utm_term: '',
+        utm_content: '',
     });
+
+    // Capture UTM parameters from URL on mount
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const utmParams = {
+            utm_source: urlParams.get('utm_source') || '',
+            utm_medium: urlParams.get('utm_medium') || '',
+            utm_campaign: urlParams.get('utm_campaign') || '',
+            utm_term: urlParams.get('utm_term') || '',
+            utm_content: urlParams.get('utm_content') || '',
+        };
+
+        // Only update if we have at least one UTM param
+        if (Object.values(utmParams).some(v => v)) {
+            Object.entries(utmParams).forEach(([key, value]) => {
+                if (value) setData(key, value);
+            });
+        }
+    }, []);
 
     const recaptchaRef = useRef(null);
     const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
@@ -305,6 +331,42 @@ export default function HeroSection() {
                                             placeholder="Email Address"
                                         />
                                         {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                                    </div>
+                                </div>
+
+                                {/* Homeowner & Property Listed Row */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                                    <div>
+                                        <label className="block text-sm md:text-base font-semibold text-text mb-1.5 md:mb-2">
+                                            Are You the Homeowner? <span className="text-red-500">*</span>
+                                        </label>
+                                        <select
+                                            required
+                                            value={data.is_homeowner}
+                                            onChange={(e) => setData('is_homeowner', e.target.value === 'true')}
+                                            className="w-full px-3 md:px-4 py-3 md:py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white text-gray-600 text-sm md:text-base"
+                                        >
+                                            <option value="">Select...</option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                        </select>
+                                        {errors.is_homeowner && <p className="text-red-500 text-sm mt-1">{errors.is_homeowner}</p>}
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm md:text-base font-semibold text-text mb-1.5 md:mb-2">
+                                            Is Property Listed? <span className="text-red-500">*</span>
+                                        </label>
+                                        <select
+                                            required
+                                            value={data.is_property_listed}
+                                            onChange={(e) => setData('is_property_listed', e.target.value === 'true')}
+                                            className="w-full px-3 md:px-4 py-3 md:py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white text-gray-600 text-sm md:text-base"
+                                        >
+                                            <option value="">Select...</option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                        </select>
+                                        {errors.is_property_listed && <p className="text-red-500 text-sm mt-1">{errors.is_property_listed}</p>}
                                     </div>
                                 </div>
 

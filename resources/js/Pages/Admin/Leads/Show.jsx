@@ -120,10 +120,66 @@ export default function Show({ lead }) {
                             <MapPin className="w-5 h-5 text-primary" />
                             Property Information
                         </h3>
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                            <div className="text-gray-900 font-medium">{lead.property_address}</div>
+                        <div className="space-y-3">
+                            <div className="p-4 bg-gray-50 rounded-lg">
+                                <div className="text-xs text-gray-500 mb-1">Address</div>
+                                <div className="text-gray-900 font-medium">{lead.property_address}</div>
+                            </div>
+                            <div className="grid sm:grid-cols-2 gap-3">
+                                <div className="p-4 bg-gray-50 rounded-lg">
+                                    <div className="text-xs text-gray-500 mb-1">Homeowner?</div>
+                                    <div className="text-gray-900 font-medium">
+                                        {lead.is_homeowner === true ? 'Yes' : lead.is_homeowner === false ? 'No' : 'Not specified'}
+                                    </div>
+                                </div>
+                                <div className="p-4 bg-gray-50 rounded-lg">
+                                    <div className="text-xs text-gray-500 mb-1">Property Listed?</div>
+                                    <div className="text-gray-900 font-medium">
+                                        {lead.is_property_listed === true ? 'Yes' : lead.is_property_listed === false ? 'No' : 'Not specified'}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    {/* UTM Data Card */}
+                    {(lead.utm_source || lead.utm_medium || lead.utm_campaign || lead.utm_term || lead.utm_content) && (
+                        <div className="bg-white rounded-xl shadow-sm p-6">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">UTM Tracking Data</h3>
+                            <div className="grid sm:grid-cols-2 gap-3">
+                                {lead.utm_source && (
+                                    <div className="p-3 bg-gray-50 rounded-lg">
+                                        <div className="text-xs text-gray-500">Source</div>
+                                        <div className="text-sm font-medium text-gray-900">{lead.utm_source}</div>
+                                    </div>
+                                )}
+                                {lead.utm_medium && (
+                                    <div className="p-3 bg-gray-50 rounded-lg">
+                                        <div className="text-xs text-gray-500">Medium</div>
+                                        <div className="text-sm font-medium text-gray-900">{lead.utm_medium}</div>
+                                    </div>
+                                )}
+                                {lead.utm_campaign && (
+                                    <div className="p-3 bg-gray-50 rounded-lg">
+                                        <div className="text-xs text-gray-500">Campaign</div>
+                                        <div className="text-sm font-medium text-gray-900">{lead.utm_campaign}</div>
+                                    </div>
+                                )}
+                                {lead.utm_term && (
+                                    <div className="p-3 bg-gray-50 rounded-lg">
+                                        <div className="text-xs text-gray-500">Term</div>
+                                        <div className="text-sm font-medium text-gray-900">{lead.utm_term}</div>
+                                    </div>
+                                )}
+                                {lead.utm_content && (
+                                    <div className="p-3 bg-gray-50 rounded-lg">
+                                        <div className="text-xs text-gray-500">Content</div>
+                                        <div className="text-sm font-medium text-gray-900">{lead.utm_content}</div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Message Card */}
                     {lead.message && (

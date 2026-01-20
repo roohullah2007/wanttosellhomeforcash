@@ -8,11 +8,37 @@ export default function ContactSection() {
         email: '',
         phone: '',
         property_address: '',
+        is_homeowner: '',
+        is_property_listed: '',
         message: '',
         source: 'contact_form',
         consent: false,
         recaptcha_token: '',
+        utm_source: '',
+        utm_medium: '',
+        utm_campaign: '',
+        utm_term: '',
+        utm_content: '',
     });
+
+    // Capture UTM parameters from URL on mount
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const utmParams = {
+            utm_source: urlParams.get('utm_source') || '',
+            utm_medium: urlParams.get('utm_medium') || '',
+            utm_campaign: urlParams.get('utm_campaign') || '',
+            utm_term: urlParams.get('utm_term') || '',
+            utm_content: urlParams.get('utm_content') || '',
+        };
+
+        // Only update if we have at least one UTM param
+        if (Object.values(utmParams).some(v => v)) {
+            Object.entries(utmParams).forEach(([key, value]) => {
+                if (value) setData(key, value);
+            });
+        }
+    }, []);
 
     const addressInputRef = useRef(null);
     const autocompleteRef = useRef(null);
@@ -250,6 +276,36 @@ export default function ContactSection() {
                                     placeholder="Start typing your address..."
                                 />
                                 {errors.property_address && <p className="text-red-500 text-sm mt-1">{errors.property_address}</p>}
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-text mb-2">Are You the Homeowner? *</label>
+                                    <select
+                                        required
+                                        value={data.is_homeowner}
+                                        onChange={(e) => setData('is_homeowner', e.target.value === 'true')}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white"
+                                    >
+                                        <option value="">Select...</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    {errors.is_homeowner && <p className="text-red-500 text-sm mt-1">{errors.is_homeowner}</p>}
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-text mb-2">Is the Property Listed? *</label>
+                                    <select
+                                        required
+                                        value={data.is_property_listed}
+                                        onChange={(e) => setData('is_property_listed', e.target.value === 'true')}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white"
+                                    >
+                                        <option value="">Select...</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    {errors.is_property_listed && <p className="text-red-500 text-sm mt-1">{errors.is_property_listed}</p>}
+                                </div>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-text mb-2">Additional Details (Optional)</label>
