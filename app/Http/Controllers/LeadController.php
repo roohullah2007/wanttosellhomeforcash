@@ -155,8 +155,14 @@ class LeadController extends Controller
     protected function sendUserConfirmation(Lead $lead): void
     {
         try {
-            // Check if user confirmation email is enabled
-            if (!Setting::get('enable_user_confirmation_email', true)) {
+            Log::info("Starting user confirmation email process for lead ID: {$lead->id}");
+
+            // Check if user confirmation email is enabled (default to true if not set)
+            $isEnabled = Setting::get('enable_user_confirmation_email');
+            Log::info("User confirmation email enabled setting: " . ($isEnabled === null ? 'not set' : ($isEnabled ? 'true' : 'false')));
+
+            // Default to true if setting doesn't exist
+            if ($isEnabled === false) {
                 Log::info("User confirmation email disabled in settings");
                 return;
             }
@@ -167,10 +173,12 @@ class LeadController extends Controller
                 return;
             }
 
+            Log::info("Preparing to send confirmation email to: {$lead->email}");
+
             // Get email settings
-            $subject = Setting::get('user_email_subject', 'We Received Your Request - Want To Sell Home For Cash');
-            $intro = Setting::get('user_email_intro', 'Thank you for reaching out to Want To Sell Home For Cash! We\'ve received your request for a cash offer and our team is already reviewing your property details.');
-            $phone = Setting::get('user_email_phone', '(786) 949-9602');
+            $subject = Setting::get('user_email_subject') ?: 'We Received Your Request - Want To Sell Home For Cash';
+            $intro = Setting::get('user_email_intro') ?: 'Thank you for reaching out to Want To Sell Home For Cash! We\'ve received your request for a cash offer and our team is already reviewing your property details.';
+            $phone = Setting::get('user_email_phone') ?: '(786) 949-9602';
 
             // Render the email HTML with settings
             $htmlContent = view('emails.lead-confirmation', [
@@ -185,9 +193,9 @@ class LeadController extends Controller
                 $htmlContent
             );
 
-            Log::info("Confirmation email sent to user: {$lead->email}");
+            Log::info("Confirmation email successfully sent to user: {$lead->email}");
         } catch (\Exception $e) {
-            Log::error("User confirmation email failed: " . $e->getMessage());
+            Log::error("User confirmation email failed for {$lead->email}: " . $e->getMessage());
         }
     }
 
