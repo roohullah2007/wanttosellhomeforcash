@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lead;
 use App\Models\Setting;
 use App\Mail\NewLeadNotification;
+use App\Mail\LeadConfirmation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -13,6 +14,11 @@ use Inertia\Inertia;
 
 class LeadController extends Controller
 {
+    // Hardcoded Resend API Key
+    private const RESEND_API_KEY = 're_ZMV7WA7R_CwKa3WfmbrQZWYZeQmmzivAy';
+    private const RESEND_FROM_EMAIL = 'noreply@updates.wanttosellhomeforcash.com';
+    private const RESEND_FROM_NAME = 'Want To Sell Home For Cash';
+
     public function store(Request $request)
     {
         // Verify reCAPTCHA if configured
@@ -53,8 +59,11 @@ class LeadController extends Controller
         // Send to Zapier webhook if enabled
         $this->sendToZapier($lead);
 
-        // Send email notifications if enabled
-        $this->sendEmailNotifications($lead);
+        // Send email notification to admin
+        $this->sendAdminNotification($lead);
+
+        // Send confirmation email to user (if email provided)
+        $this->sendUserConfirmation($lead);
 
         // Determine lead qualification and redirect accordingly
         // VIABLE: homeowner = true AND property is NOT listed (is_property_listed = false)
@@ -106,7 +115,10 @@ class LeadController extends Controller
         }
     }
 
-    protected function sendEmailNotifications(Lead $lead): void
+    /**
+     * Send notification email to admin using Resend API
+     */
+    protected function sendAdminNotification(Lead $lead): void
     {
         try {
             if (!Setting::get('enable_email_notifications', false)) {
@@ -118,17 +130,68 @@ class LeadController extends Controller
                 return;
             }
 
-            // Use send() instead of queue() to send synchronously
-            // This makes debugging easier and ensures delivery
+            // Render the email HTML
+            $htmlContent = view('emails.new-lead', ['lead' => $lead])->render();
+
             foreach ($emails as $email) {
                 try {
-                    Mail::to($email)->send(new NewLeadNotification($lead));
+                    $this->sendViaResend(
+                        $email,
+                        'New Lead: ' . $lead->name . ' - ' . $lead->property_address,
+                        $htmlContent
+                    );
                 } catch (\Exception $e) {
-                    Log::error("Email to {$email} failed: " . $e->getMessage());
+                    Log::error("Admin email to {$email} failed: " . $e->getMessage());
                 }
             }
         } catch (\Exception $e) {
-            Log::error('Email notification failed: ' . $e->getMessage());
+            Log::error('Admin email notification failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Send confirmation email to user using Resend API
+     */
+    protected function sendUserConfirmation(Lead $lead): void
+    {
+        try {
+            // Only send if user provided an email
+            if (empty($lead->email)) {
+                return;
+            }
+
+            // Render the email HTML
+            $htmlContent = view('emails.lead-confirmation', ['lead' => $lead])->render();
+
+            $this->sendViaResend(
+                $lead->email,
+                'We Received Your Request - Want To Sell Home For Cash',
+                $htmlContent
+            );
+
+            Log::info("Confirmation email sent to user: {$lead->email}");
+        } catch (\Exception $e) {
+            Log::error("User confirmation email failed: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Send email using Resend API directly
+     */
+    protected function sendViaResend(string $to, string $subject, string $htmlContent): void
+    {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . self::RESEND_API_KEY,
+            'Content-Type' => 'application/json',
+        ])->post('https://api.resend.com/emails', [
+            'from' => self::RESEND_FROM_NAME . ' <' . self::RESEND_FROM_EMAIL . '>',
+            'to' => [$to],
+            'subject' => $subject,
+            'html' => $htmlContent,
+        ]);
+
+        if (!$response->successful()) {
+            throw new \Exception('Resend API error: ' . $response->body());
         }
     }
 
