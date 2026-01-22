@@ -146,7 +146,7 @@
             <p class="greeting">Hi {{ explode(' ', $lead->name)[0] }},</p>
 
             <p class="message">
-                Thank you for reaching out to Want To Sell Home For Cash! We've received your request for a cash offer and our team is already reviewing your property details.
+                {{ $emailIntro ?? 'Thank you for reaching out to Want To Sell Home For Cash! We\'ve received your request for a cash offer and our team is already reviewing your property details.' }}
             </p>
 
             <div class="property-box">
@@ -184,7 +184,7 @@
 
             <div class="contact-box">
                 <p>Have questions? Give us a call!</p>
-                <a href="tel:+17869499602" class="phone">(786) 949-9602</a>
+                <a href="tel:{{ preg_replace('/[^0-9]/', '', $emailPhone ?? '7869499602') }}" class="phone">{{ $emailPhone ?? '(786) 949-9602' }}</a>
             </div>
 
             <p style="color: #6b7280; font-size: 14px; text-align: center;">

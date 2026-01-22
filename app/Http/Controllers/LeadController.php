@@ -155,17 +155,33 @@ class LeadController extends Controller
     protected function sendUserConfirmation(Lead $lead): void
     {
         try {
-            // Only send if user provided an email
-            if (empty($lead->email)) {
+            // Check if user confirmation email is enabled
+            if (!Setting::get('enable_user_confirmation_email', true)) {
+                Log::info("User confirmation email disabled in settings");
                 return;
             }
 
-            // Render the email HTML
-            $htmlContent = view('emails.lead-confirmation', ['lead' => $lead])->render();
+            // Only send if user provided an email
+            if (empty($lead->email)) {
+                Log::info("No email provided by user, skipping confirmation email");
+                return;
+            }
+
+            // Get email settings
+            $subject = Setting::get('user_email_subject', 'We Received Your Request - Want To Sell Home For Cash');
+            $intro = Setting::get('user_email_intro', 'Thank you for reaching out to Want To Sell Home For Cash! We\'ve received your request for a cash offer and our team is already reviewing your property details.');
+            $phone = Setting::get('user_email_phone', '(786) 949-9602');
+
+            // Render the email HTML with settings
+            $htmlContent = view('emails.lead-confirmation', [
+                'lead' => $lead,
+                'emailIntro' => $intro,
+                'emailPhone' => $phone,
+            ])->render();
 
             $this->sendViaResend(
                 $lead->email,
-                'We Received Your Request - Want To Sell Home For Cash',
+                $subject,
                 $htmlContent
             );
 
