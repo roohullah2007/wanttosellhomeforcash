@@ -108,6 +108,16 @@
                 <div class="value">{{ $lead->property_address }}</div>
             </div>
 
+            <div class="field">
+                <div class="label">Homeowner?</div>
+                <div class="value">{{ $lead->is_homeowner === true ? 'Yes' : ($lead->is_homeowner === false ? 'No' : 'Not specified') }}</div>
+            </div>
+
+            <div class="field">
+                <div class="label">Property Listed?</div>
+                <div class="value">{{ $lead->is_property_listed === true ? 'Yes' : ($lead->is_property_listed === false ? 'No' : 'Not specified') }}</div>
+            </div>
+
             @if($lead->message)
             <div class="field">
                 <div class="label">Additional Message</div>
@@ -124,6 +134,19 @@
                 <div class="label">Submitted At</div>
                 <div class="value">{{ $lead->created_at->format('F j, Y \a\t g:i A') }}</div>
             </div>
+
+            @if($lead->utm_source || $lead->utm_medium || $lead->utm_campaign || $lead->utm_term || $lead->utm_content)
+            <div class="field">
+                <div class="label">UTM Tracking Data</div>
+                <div class="value" style="font-size: 14px;">
+                    @if($lead->utm_source)<strong>Source:</strong> {{ $lead->utm_source }}<br>@endif
+                    @if($lead->utm_medium)<strong>Medium:</strong> {{ $lead->utm_medium }}<br>@endif
+                    @if($lead->utm_campaign)<strong>Campaign:</strong> {{ $lead->utm_campaign }}<br>@endif
+                    @if($lead->utm_term)<strong>Term:</strong> {{ $lead->utm_term }}<br>@endif
+                    @if($lead->utm_content)<strong>Content:</strong> {{ $lead->utm_content }}@endif
+                </div>
+            </div>
+            @endif
         </div>
 
         <div style="text-align: center;">
