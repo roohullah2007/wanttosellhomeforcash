@@ -133,8 +133,12 @@ class LeadController extends Controller
             // Render the email HTML
             $htmlContent = view('emails.new-lead', ['lead' => $lead])->render();
 
-            foreach ($emails as $email) {
+            foreach ($emails as $index => $email) {
                 try {
+                    // Add delay between emails to avoid Resend rate limit (2 req/sec)
+                    if ($index > 0) {
+                        usleep(600000); // 600ms delay
+                    }
                     $this->sendViaResend(
                         $email,
                         'New Lead: ' . $lead->name . ' - ' . $lead->property_address,
@@ -144,6 +148,8 @@ class LeadController extends Controller
                     Log::error("Admin email to {$email} failed: " . $e->getMessage());
                 }
             }
+            // Add delay after admin emails before sending user confirmation
+            usleep(600000); // 600ms delay
         } catch (\Exception $e) {
             Log::error('Admin email notification failed: ' . $e->getMessage());
         }
