@@ -204,6 +204,8 @@ class LeadController extends Controller
      */
     protected function sendViaResend(string $to, string $subject, string $htmlContent): void
     {
+        Log::info("Sending email via Resend to: {$to}, subject: {$subject}");
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . self::RESEND_API_KEY,
             'Content-Type' => 'application/json',
@@ -214,9 +216,18 @@ class LeadController extends Controller
             'html' => $htmlContent,
         ]);
 
+        $statusCode = $response->status();
+        $responseBody = $response->body();
+        $responseJson = $response->json();
+
+        Log::info("Resend API response - Status: {$statusCode}, Body: {$responseBody}");
+
         if (!$response->successful()) {
-            throw new \Exception('Resend API error: ' . $response->body());
+            $errorMessage = $responseJson['message'] ?? $responseBody ?? 'Unknown error';
+            throw new \Exception("Resend API error (HTTP {$statusCode}): {$errorMessage}");
         }
+
+        Log::info("Email sent successfully via Resend. ID: " . ($responseJson['id'] ?? 'unknown'));
     }
 
     public function thankYou()
