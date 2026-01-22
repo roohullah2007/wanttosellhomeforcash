@@ -24,6 +24,7 @@ class Lead extends Model
         'utm_campaign',
         'utm_term',
         'utm_content',
+        'gclid',
         'status',
         'notes',
     ];

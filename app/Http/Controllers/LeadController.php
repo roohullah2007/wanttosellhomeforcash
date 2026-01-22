@@ -45,6 +45,7 @@ class LeadController extends Controller
             'utm_campaign' => 'nullable|string|max:255',
             'utm_term' => 'nullable|string|max:255',
             'utm_content' => 'nullable|string|max:255',
+            'gclid' => 'nullable|string|max:255',
         ]);
 
         $lead = Lead::create($validated);
@@ -97,6 +98,7 @@ class LeadController extends Controller
                 'utm_campaign' => $lead->utm_campaign,
                 'utm_term' => $lead->utm_term,
                 'utm_content' => $lead->utm_content,
+                'gclid' => $lead->gclid,
                 'created_at' => $lead->created_at->toIso8601String(),
             ]);
         } catch (\Exception $e) {

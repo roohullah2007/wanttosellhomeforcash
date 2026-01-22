@@ -19,25 +19,25 @@ export default function ContactSection() {
         utm_campaign: '',
         utm_term: '',
         utm_content: '',
+        gclid: '',
     });
 
-    // Capture UTM parameters from URL on mount
+    // Capture UTM parameters and Google Click ID from URL on mount
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const utmParams = {
+        const trackingParams = {
             utm_source: urlParams.get('utm_source') || '',
             utm_medium: urlParams.get('utm_medium') || '',
             utm_campaign: urlParams.get('utm_campaign') || '',
             utm_term: urlParams.get('utm_term') || '',
             utm_content: urlParams.get('utm_content') || '',
+            gclid: urlParams.get('gclid') || '',
         };
 
-        // Only update if we have at least one UTM param
-        if (Object.values(utmParams).some(v => v)) {
-            Object.entries(utmParams).forEach(([key, value]) => {
-                if (value) setData(key, value);
-            });
-        }
+        // Update form data with any tracking params found
+        Object.entries(trackingParams).forEach(([key, value]) => {
+            if (value) setData(key, value);
+        });
     }, []);
 
     const addressInputRef = useRef(null);

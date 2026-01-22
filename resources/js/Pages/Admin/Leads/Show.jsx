@@ -142,10 +142,10 @@ export default function Show({ lead }) {
                         </div>
                     </div>
 
-                    {/* UTM Data Card */}
-                    {(lead.utm_source || lead.utm_medium || lead.utm_campaign || lead.utm_term || lead.utm_content) && (
+                    {/* Tracking Data Card */}
+                    {(lead.utm_source || lead.utm_medium || lead.utm_campaign || lead.utm_term || lead.utm_content || lead.gclid) && (
                         <div className="bg-white rounded-xl shadow-sm p-6">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-4">UTM Tracking Data</h3>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Tracking Data</h3>
                             <div className="grid sm:grid-cols-2 gap-3">
                                 {lead.utm_source && (
                                     <div className="p-3 bg-gray-50 rounded-lg">
@@ -175,6 +175,12 @@ export default function Show({ lead }) {
                                     <div className="p-3 bg-gray-50 rounded-lg">
                                         <div className="text-xs text-gray-500">Content</div>
                                         <div className="text-sm font-medium text-gray-900">{lead.utm_content}</div>
+                                    </div>
+                                )}
+                                {lead.gclid && (
+                                    <div className="p-3 bg-gray-50 rounded-lg sm:col-span-2">
+                                        <div className="text-xs text-gray-500">Google Click ID (gclid)</div>
+                                        <div className="text-sm font-medium text-gray-900 break-all">{lead.gclid}</div>
                                     </div>
                                 )}
                             </div>
