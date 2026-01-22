@@ -342,13 +342,13 @@ export default function HeroSection() {
                                         </label>
                                         <select
                                             required
-                                            value={data.is_homeowner}
-                                            onChange={(e) => setData('is_homeowner', e.target.value === 'true')}
+                                            value={data.is_homeowner === true ? 'Yes' : data.is_homeowner === false ? 'No' : ''}
+                                            onChange={(e) => setData('is_homeowner', e.target.value === 'Yes' ? true : e.target.value === 'No' ? false : '')}
                                             className="w-full px-3 md:px-4 py-3 md:py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white text-gray-600 text-sm md:text-base"
                                         >
                                             <option value="">Select...</option>
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
                                         </select>
                                         {errors.is_homeowner && <p className="text-red-500 text-sm mt-1">{errors.is_homeowner}</p>}
                                     </div>
@@ -358,13 +358,13 @@ export default function HeroSection() {
                                         </label>
                                         <select
                                             required
-                                            value={data.is_property_listed}
-                                            onChange={(e) => setData('is_property_listed', e.target.value === 'true')}
+                                            value={data.is_property_listed === true ? 'Yes' : data.is_property_listed === false ? 'No' : ''}
+                                            onChange={(e) => setData('is_property_listed', e.target.value === 'Yes' ? true : e.target.value === 'No' ? false : '')}
                                             className="w-full px-3 md:px-4 py-3 md:py-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white text-gray-600 text-sm md:text-base"
                                         >
                                             <option value="">Select...</option>
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
                                         </select>
                                         {errors.is_property_listed && <p className="text-red-500 text-sm mt-1">{errors.is_property_listed}</p>}
                                     </div>
