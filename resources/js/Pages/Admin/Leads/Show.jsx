@@ -129,13 +129,13 @@ export default function Show({ lead }) {
                                 <div className="p-4 bg-gray-50 rounded-lg">
                                     <div className="text-xs text-gray-500 mb-1">Homeowner?</div>
                                     <div className="text-gray-900 font-medium">
-                                        {lead.is_homeowner === true ? 'Yes' : lead.is_homeowner === false ? 'No' : 'Not specified'}
+                                        {lead.is_homeowner || 'Not specified'}
                                     </div>
                                 </div>
                                 <div className="p-4 bg-gray-50 rounded-lg">
                                     <div className="text-xs text-gray-500 mb-1">Property Listed?</div>
                                     <div className="text-gray-900 font-medium">
-                                        {lead.is_property_listed === true ? 'Yes' : lead.is_property_listed === false ? 'No' : 'Not specified'}
+                                        {lead.is_property_listed || 'Not specified'}
                                     </div>
                                 </div>
                             </div>

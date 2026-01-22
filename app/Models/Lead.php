@@ -30,8 +30,6 @@ class Lead extends Model
     ];
 
     protected $casts = [
-        'is_homeowner' => 'boolean',
-        'is_property_listed' => 'boolean',
         'consent' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

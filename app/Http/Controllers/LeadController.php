@@ -41,8 +41,8 @@ class LeadController extends Controller
             'email' => 'nullable|email|max:255',
             'phone' => 'required|string|max:20',
             'property_address' => 'required|string|max:500',
-            'is_homeowner' => 'nullable|boolean',
-            'is_property_listed' => 'nullable|boolean',
+            'is_homeowner' => 'nullable|string|in:Yes,No',
+            'is_property_listed' => 'nullable|string|in:Yes,No',
             'message' => 'nullable|string|max:2000',
             'consent' => 'required|boolean|accepted',
             'source' => 'nullable|string|max:50',
@@ -66,9 +66,9 @@ class LeadController extends Controller
         $this->sendUserConfirmation($lead);
 
         // Determine lead qualification and redirect accordingly
-        // VIABLE: homeowner = true AND property is NOT listed (is_property_listed = false)
+        // VIABLE: homeowner = Yes AND property is NOT listed (is_property_listed = No)
         // NON-VIABLE: not homeowner OR property is listed
-        $isViable = $lead->is_homeowner === true && $lead->is_property_listed === false;
+        $isViable = $lead->is_homeowner === 'Yes' && $lead->is_property_listed === 'No';
 
         if ($isViable) {
             // Viable leads go to thank-you page (tracked in Google Ads)

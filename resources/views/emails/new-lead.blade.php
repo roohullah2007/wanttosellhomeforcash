@@ -110,12 +110,12 @@
 
             <div class="field">
                 <div class="label">Homeowner?</div>
-                <div class="value">{{ $lead->is_homeowner === true ? 'Yes' : ($lead->is_homeowner === false ? 'No' : 'Not specified') }}</div>
+                <div class="value">{{ $lead->is_homeowner ?: 'Not specified' }}</div>
             </div>
 
             <div class="field">
                 <div class="label">Property Listed?</div>
-                <div class="value">{{ $lead->is_property_listed === true ? 'Yes' : ($lead->is_property_listed === false ? 'No' : 'Not specified') }}</div>
+                <div class="value">{{ $lead->is_property_listed ?: 'Not specified' }}</div>
             </div>
 
             @if($lead->message)

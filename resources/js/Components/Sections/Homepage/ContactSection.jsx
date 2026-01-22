@@ -282,8 +282,8 @@ export default function ContactSection() {
                                     <label className="block text-sm font-medium text-text mb-2">Are You the Homeowner? *</label>
                                     <select
                                         required
-                                        value={data.is_homeowner === true ? 'Yes' : data.is_homeowner === false ? 'No' : ''}
-                                        onChange={(e) => setData('is_homeowner', e.target.value === 'Yes' ? true : e.target.value === 'No' ? false : '')}
+                                        value={data.is_homeowner}
+                                        onChange={(e) => setData('is_homeowner', e.target.value)}
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white"
                                     >
                                         <option value="">Select...</option>
@@ -296,8 +296,8 @@ export default function ContactSection() {
                                     <label className="block text-sm font-medium text-text mb-2">Is the Property Listed? *</label>
                                     <select
                                         required
-                                        value={data.is_property_listed === true ? 'Yes' : data.is_property_listed === false ? 'No' : ''}
-                                        onChange={(e) => setData('is_property_listed', e.target.value === 'Yes' ? true : e.target.value === 'No' ? false : '')}
+                                        value={data.is_property_listed}
+                                        onChange={(e) => setData('is_property_listed', e.target.value)}
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white"
                                     >
                                         <option value="">Select...</option>
