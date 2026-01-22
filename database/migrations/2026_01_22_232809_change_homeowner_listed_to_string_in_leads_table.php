@@ -12,20 +12,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // First convert existing boolean data to Yes/No strings
-        DB::table('leads')->whereNotNull('is_homeowner')->update([
-            'is_homeowner' => DB::raw("CASE WHEN is_homeowner = 1 THEN 'Yes' WHEN is_homeowner = 0 THEN 'No' ELSE NULL END")
-        ]);
-
-        DB::table('leads')->whereNotNull('is_property_listed')->update([
-            'is_property_listed' => DB::raw("CASE WHEN is_property_listed = 1 THEN 'Yes' WHEN is_property_listed = 0 THEN 'No' ELSE NULL END")
-        ]);
-
-        // Change column types to string
+        // First change column types to string (this allows storing text values)
         Schema::table('leads', function (Blueprint $table) {
             $table->string('is_homeowner', 10)->nullable()->change();
             $table->string('is_property_listed', 10)->nullable()->change();
         });
+
+        // Then convert existing boolean data (1/0) to Yes/No strings
+        DB::table('leads')->where('is_homeowner', '1')->update(['is_homeowner' => 'Yes']);
+        DB::table('leads')->where('is_homeowner', '0')->update(['is_homeowner' => 'No']);
+        DB::table('leads')->where('is_property_listed', '1')->update(['is_property_listed' => 'Yes']);
+        DB::table('leads')->where('is_property_listed', '0')->update(['is_property_listed' => 'No']);
     }
 
     /**
@@ -33,11 +30,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Convert Yes/No back to boolean
-        DB::table('leads')->update([
-            'is_homeowner' => DB::raw("CASE WHEN is_homeowner = 'Yes' THEN 1 WHEN is_homeowner = 'No' THEN 0 ELSE NULL END"),
-            'is_property_listed' => DB::raw("CASE WHEN is_property_listed = 'Yes' THEN 1 WHEN is_property_listed = 'No' THEN 0 ELSE NULL END")
-        ]);
+        // Convert Yes/No back to 1/0
+        DB::table('leads')->where('is_homeowner', 'Yes')->update(['is_homeowner' => '1']);
+        DB::table('leads')->where('is_homeowner', 'No')->update(['is_homeowner' => '0']);
+        DB::table('leads')->where('is_property_listed', 'Yes')->update(['is_property_listed' => '1']);
+        DB::table('leads')->where('is_property_listed', 'No')->update(['is_property_listed' => '0']);
 
         // Change column types back to boolean
         Schema::table('leads', function (Blueprint $table) {
