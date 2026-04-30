@@ -58,7 +58,7 @@
             .bg-primary{background-color:#053E78}
         </style>
 
-        <title inertia>{{ config('app.name', 'Want To Sell Home For Cash') }}</title>
+        <title inertia>Want To Sell Home For Cash</title>
 
         <!-- Favicons -->
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
