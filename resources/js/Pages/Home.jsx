@@ -19,7 +19,10 @@ import {
 export default function Home() {
     return (
         <>
-            <Head title="Sell Your House Fast for Cash" />
+            <Head>
+                <title>Want To Sell Home For Cash</title>
+                <meta name="description" content="Your Trusted Home Buyers Nationwide. Get a fair cash offer in 24 hours. We buy houses in any condition. Close on your timeline." />
+            </Head>
             <div className="min-h-screen bg-white">
                 <TopBar />
                 <Header />
